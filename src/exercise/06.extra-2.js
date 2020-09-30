@@ -1,24 +1,30 @@
-// 3. 💯 Control the input value
+// 2. 💯 Validate lower-case
 // Basic Forms
 
 import React from 'react'
 
 function UsernameForm({onSubmitUsername}) {
-  const [username, setUsername] = React.useState('')
+  const [value, setValue] = React.useState('')
+  const [error, setError] = React.useState(null)
+
+  const isValid = value === value.toLowerCase()
 
   const handleChange = event => {
-    setUsername(event.target.value)
+    setValue(event.target.value)
     console.log(event.target.value)
   }
 
   const handleSubmit = event => {
     event.preventDefault()
 
-    const name = event.target.username.value
+    const username = event.target.username.value
 
-    onSubmitUsername(name)
+    setError(isValid ? null : 'Username must be lower case')
+    if (!error) {
+      onSubmitUsername(username)
+    }
 
-    console.log(name)
+    console.log(username)
   }
   return (
     <form onSubmit={handleSubmit}>
@@ -26,12 +32,12 @@ function UsernameForm({onSubmitUsername}) {
         <label htmlFor="username">Username:</label>
         <input
           onChange={handleChange}
-          value={username.toLowerCase()}
           type="text"
           id="username"
           name="username"
         />
       </div>
+      {error && <div>{error}</div>}
       <button type="submit">Submit</button>
     </form>
   )
